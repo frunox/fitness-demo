@@ -10,18 +10,13 @@ import './Home.css';
 
 const Home: React.FC = () => {
   return (
-    <IonPage>
+    <IonPage className="home">
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>HOME</IonTitle>
+        <IonToolbar className="home-toolbar">
+          <IonTitle>HOME PAGE</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <ExploreContainer />
       </IonContent>
     </IonPage>
