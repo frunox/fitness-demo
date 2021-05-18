@@ -1,21 +1,45 @@
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
+import { getPlatforms, IonApp, IonLoading } from '@ionic/react';
+import { Capacitor } from '@capacitor/core';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import AppTabs from './AppTabs';
+import { AuthContext, useAuthInit } from './auth';
+import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
+import RegisterPage from './pages/RegisterPage';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  const { loading, auth } = useAuthInit();
+  if (loading) {
+    return <IonLoading isOpen />;
+  }
+  console.log('Capacitor platforms: ', Capacitor.getPlatform());
+  console.log('Ionic React platforms: ', getPlatforms());
+  console.log(`rendering App with auth:`, auth);
+  return (
+    <IonApp>
+      <AuthContext.Provider value={auth}>
+        <IonReactRouter>
+          <Switch>
+            <Route exact path="/login">
+              <LoginPage />
+            </Route>
+            <Route exact path="/register">
+              <RegisterPage />
+            </Route>
+            <Route path="/my">
+              <AppTabs />
+            </Route>
+            <Redirect exact path="/" to="/my/entries" />
+            <Route>
+              <NotFoundPage />
+            </Route>
+          </Switch>
+        </IonReactRouter>
+      </AuthContext.Provider>
+    </IonApp>
+  );
+};
 
 export default App;
